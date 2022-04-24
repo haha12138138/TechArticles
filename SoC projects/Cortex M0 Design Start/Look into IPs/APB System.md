@@ -33,7 +33,6 @@ APB 接口与时序
 ![[APB MUX Ports.jpg]]
 ### APB时序
 如何将APB总线抽象成带有valid，ready加data的接口呢？ ready 我们已经找到了直接就是PREADY信号，而valid 则直接就是PSEL。我们来看看ARM 给出的example waveform。
-#todo %%加入 wavedrom 的 wave%%
 ![[APB wait trans.png]]
 可以看到当传输的valid 置高之后必须要等ready置高才能被清除，期间传输的内容都不能发生变化。这个规则将贯穿APB AHB AXI 3种常用的嵌入式总线协议里。APB总线节能和省面积的原因也就在这里：
 1.  no speculation，不进行推测执行。只有等到一整个传输确认完成之后才能启动下一个传输。这样便不需要终止预测执行的传输。
@@ -46,4 +45,9 @@ PENABLE 这个信号看起来好像是多余的，有很多博主仅仅把它当
 ### 总结
 本节就讲述了基本的APB系统的组成以及APB协议的一些讲解。
 下一章将实操一个APB register 并由此讲APB的编程模型（programmer model）
-[[APB Register]]
+[[APB Register File]]
+之后还将陆续讲解
+[[APB interrupt]]
+[[APB Power Ctrl]]
+[[APB Bridge]]
+
