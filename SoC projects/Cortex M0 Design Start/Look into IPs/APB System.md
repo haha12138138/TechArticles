@@ -12,7 +12,7 @@ APB 系统是一个一主多从的总线系统，主机和从机使用APB协议�
 1.  发送中断信息
 3. 功耗控制
 
-其中读写数据以及能提供等待与错误这两种流控制信号是必须的功能，因为这样才能相对完整的实现APB协议。给系统双方提供一个交流通道。在design start工程中，ARM提供了一个APB Subsystem 的实现（使用了APB3协议），后文将基于这个设计并对它进行讲解与功能升级。
+其中读写数据以及能提供等待与错误这两种流控制信号是必须的功能，因为这样才能相对完整的实现APB协议。给系统双方提供一个交流通道。在design start工程中，ARM提供了一个APB Subsystem 的实现（使用了APB4协议），后文将基于这个设计并对它进行讲解与功能升级。
 ### APB系统构成
 先来宏观的了解一下APB系统有哪些组成部分
 ![[SoC projects/Cortex M0 Design Start/pics/APBsystem.drawio 2.drawio.png]]
