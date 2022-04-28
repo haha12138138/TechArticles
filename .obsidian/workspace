@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
             "mode": "source",
             "source": false
           }
@@ -36,7 +36,7 @@
         "state": {
           "type": "search",
           "state": {
-            "query": "tag:#todo",
+            "query": "tag:#IP介绍",
             "matchingCase": false,
             "explainSearch": false,
             "collapseAll": false,
@@ -58,7 +58,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -75,7 +75,7 @@
         "state": {
           "type": "outgoing-link",
           "state": {
-            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
             "linksCollapsed": false,
             "unlinkedCollapsed": true
           }
@@ -87,24 +87,33 @@
         "state": {
           "type": "outline",
           "state": {
-            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md"
+            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md"
           }
+        }
+      },
+      {
+        "id": "3d48efc7bb141f08",
+        "type": "leaf",
+        "state": {
+          "type": "advanced-tables-toolbar",
+          "state": {}
         }
       }
     ],
-    "currentTab": 0
+    "currentTab": 2,
+    "pinned": true
   },
   "active": "ff6d8da8d17effe2",
   "lastOpenFiles": [
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+    "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Power Ctrl.md",
     "SoC projects/Cortex M0 Design Start/Look into IPs/APB Register File.md",
-    "APB System｜上一篇.md",
-    "IMG_0005.jpg.md",
-    "IMG_0005.jpg",
-    "SoC projects/Cortex M0 Design Start/pics/APB Master Ports.jpg",
-    "IMG_0005 1.jpg",
-    "SoC projects/Cortex M0 Design Start/pics/APB MUX Ports.jpg",
-    "SoC projects/Cortex M0 Design Start/pics/APB MUX Ports.jpg",
-    "SoC projects/Cortex M0 Design Start/pics/APB Master Port.jpg"
+    "SoC projects/Cortex M0 Design Start/pics/ICG.png",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+    "pclken wave.png.md",
+    "SoC projects/Cortex M0 Design Start/pics/pclken wave.png",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB interrupt.md",
+    "SoC projects/IC Design/Low Power Design/Clock Gating.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md"
   ]
 }
