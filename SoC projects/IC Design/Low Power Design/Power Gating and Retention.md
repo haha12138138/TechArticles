@@ -1,3 +1,10 @@
+#ic_basic #low_power 
+
+这章主要会提到：
+1. Power Gating 的目的与方法
+2. Retention 的意义与Retention Cell的结构。
+3. Retention Cell 的时序
+
 ### Power Gating
 Power Gating 是除了[[Clock Gating]]另外的一种常用的低功耗手段。
 Clock Gating，通过减少时钟的翻转率来降低动态功耗。这个方法通过在电源轨到cmos s 端添加了一个做为开关的power gating cell，降低由漏电流引起的静态功耗。为了将这部分功耗尽可能的降低通常会使用较高Vt的晶体管来作为开关。同时又为了能够不限制正常工作时的电流，这些开关需要尽可能的并联。不过无论怎么并联，这个开关总会消耗一定的电压，在设计时需要注意。
