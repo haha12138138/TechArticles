@@ -1,6 +1,14 @@
+#ic_basic #low_power
+
+这一章主要会提到：
+1.  Clock Gating 的目的以及方法
+2. Clock Gateing Cell 的结构以及行为级rtl
+3. Clock Gating 的效果
+
 ### Clock Gating
 Clock gating 是一种常用的低功耗方法，这种方法通过将暂时不工作的DFF的时钟置高或置低来达到减小功耗的目的。
-⚠️clock gating **不能**直接使用一个与门或者或门来进行gating。因为这个控制信号有可能会和需要控制的clock是异步关系。就即使是同步信号，因为routing，crosstalk 等等原因有可能会出现**延时或者毛刺**，这些不理想因素往往会造成DFF的工作异常：**hold voilation，min-pulse-width violation** 等等。
+> ⚠️clock gating **不能**直接使用一个与门或者或门来进行gating。因为这个控制信号有可能会和需要控制的clock是异步关系。就即使是同步信号，因为routing，crosstalk 等等原因有可能会出现**毛刺**，这些不理想因素往往会造成DFF的工作异常。
+
 解决它的问题也很简单，对于posedge DFF，我们只需要在clock 为1 的时候让控制信号稳定，在clock为0时接受外部控制信号的控制。通常来说ASIC library中有一种单元叫Integrated Clock gate（ICG）。
 ![[ICG.png]]
 如果说我们在做行为级仿真的时候没有这样的cell，我们也可以用RTL代码暂时替代。
@@ -18,8 +26,8 @@ assign CLK_out=E_temp&CLK;
 #### Clock Gating 效果
 其实笔者之前并不认为clock gating 能够降低多少功耗，特意做了个小实验来看看clock gating 的效果。这个实验包含3个工况：
 1.  正常工作： Clock 使能，D端一直输入数据
-2. 空闲未工作： Clock 使能，D端输入常数
-3. 待机未工作：Clock 失能，D端输入数据
+2. 正常未工作： Clock 使能，D端输入常数
+3. 待机未工作：Clock 失能，D端输入常数
 
 | 状况 | Internal Power /mW | Leakage Power/mW       | Total Power/mW |
 | ---- | ------------------ | ---------------------- | -------------- |
