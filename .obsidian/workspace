@@ -36,7 +36,7 @@
         "state": {
           "type": "search",
           "state": {
-            "query": "tag:#IP介绍",
+            "query": "tag:#APB",
             "matchingCase": false,
             "explainSearch": false,
             "collapseAll": false,
@@ -106,14 +106,14 @@
   "active": "ff6d8da8d17effe2",
   "lastOpenFiles": [
     "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+    "SoC projects/IC Design/Low Power Design/Clock Gating.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB interrupt.md",
     "SoC projects/Cortex M0 Design Start/Look into IPs/APB Power Ctrl.md",
     "SoC projects/Cortex M0 Design Start/Look into IPs/APB Register File.md",
-    "SoC projects/Cortex M0 Design Start/pics/ICG.png",
     "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md",
+    "SoC projects/Cortex M0 Design Start/pics/ICG.png",
     "pclken wave.png.md",
-    "SoC projects/Cortex M0 Design Start/pics/pclken wave.png",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB interrupt.md",
-    "SoC projects/IC Design/Low Power Design/Clock Gating.md",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md"
+    "SoC projects/Cortex M0 Design Start/pics/pclken wave.png"
   ]
 }
