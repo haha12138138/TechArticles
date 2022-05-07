@@ -47,10 +47,14 @@ assign PSLVERR= PSEL&PREADY&error_from_reg;
 
 > ⚠️这也就意味着这些寄存器即使宽度不为32bit，也必须占一个Word 的地址空间，也就是APB寄存器堆按word进行对齐。
 
-当然，即使我们的寄存器小于32bit 我们也不需要担心浪费空间，因为能使用的地址空间相当的多，在designstart 里面ARM为一个APB子系统预留了64KB的地址，绰绰有余了。
+当然，即使我们的寄存器小于32bit 我们也不需要担心浪费空间，因为能使用的地址空间相当的多，在designstart 里面ARM为一个APB子系统预留了64KB的地址(见下表)，绰绰有余了。
 > 设计寄存器堆的时候重点在于将有联系的部分放在一起
 
-%% #todo ARM Memory Layout%%
+
+| System Bolck | Address               | size |
+| ------------ | --------------------- | ---- |
+| APB System   | 0x40000000-0x4000ffff | 64kB | 
+
 
 ### 具体寄存器堆rtl设计
 这一章主要展示实现一个寄存器的各组成的代码片段，以供参考
