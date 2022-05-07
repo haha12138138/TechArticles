@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md",
             "mode": "source",
             "source": false
           }
@@ -58,7 +58,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -75,7 +75,7 @@
         "state": {
           "type": "outgoing-link",
           "state": {
-            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md",
             "linksCollapsed": false,
             "unlinkedCollapsed": true
           }
@@ -87,7 +87,7 @@
         "state": {
           "type": "outline",
           "state": {
-            "file": "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md"
+            "file": "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md"
           }
         }
       },
@@ -105,13 +105,13 @@
   },
   "active": "ff6d8da8d17effe2",
   "lastOpenFiles": [
-    "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
-    "SoC projects/IC Design/Low Power Design/Clock Gating.md",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB interrupt.md",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Power Ctrl.md",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Register File.md",
-    "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
     "SoC projects/Cortex M0 Design Start/Look into IPs/APB Bridge.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Register File.md",
+    "SoC projects/IC Design/Low Power Design/Clock Gating.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB Power Ctrl.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB System.md",
+    "SoC projects/IC Design/Low Power Design/Power Gating and Retention.md",
+    "SoC projects/Cortex M0 Design Start/Look into IPs/APB interrupt.md",
     "SoC projects/Cortex M0 Design Start/pics/ICG.png",
     "pclken wave.png.md",
     "SoC projects/Cortex M0 Design Start/pics/pclken wave.png"
