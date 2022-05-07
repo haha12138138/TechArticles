@@ -55,6 +55,7 @@ ARM 将整个传输过程分为了不同状态：
 完全理解整个设计会涉及到[[UPF]] [[Clock Gating]] [[Power Gating and Retention]] 的内容，在这里我们直接运行其中的脚本来观察整个系统是如何运作的。
 
 %%
+#todo 
 1. 整个 APB 关断
 2. 发出 启动信号
 3. check是否 正常启动
