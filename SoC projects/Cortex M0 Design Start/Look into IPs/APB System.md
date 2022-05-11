@@ -1,4 +1,4 @@
-#APB #IP介绍 
+#APB #系统介绍 
 %% 
 APB 介绍 及系统构成
 %%
@@ -47,10 +47,8 @@ PENABLE 这个信号看起来好像是多余的，有很多博主仅仅把它当
 其余的transfer 如 error response则依此类推不再详述。具体可以参考ARM 的 specification。
 ### 总结
 本节就讲述了基本的APB系统的组成以及APB协议的一些讲解。
-下一章将实操一个APB register 并由此讲APB的编程模型（programmer model）
-[[APB Register File]]
-之后还将陆续讲解
-[[APB interrupt]]
-[[APB Power Ctrl]]
+下一章将看 APB系统中的adapter：AHB-APB Bridge
 [[APB Bridge]]
+
+
 
