@@ -8,7 +8,7 @@ APB peripherals that integrate interrupts
 2. 扩展APB中断的方法
 
 ### APB 中断信号
-这些信号和[[APB Power Ctrl]] 里面提到的功耗控制引脚一样没有包含在APB Bus中。这些信号被称作 side-band signal，这些信号能够提供额外的功能。APB 中断信号能够直接展示APB 从机重要的状态，而无需进行Bus读写来获得状态。
+这些信号被称作 side-band signal，因为它没有直接出现在在APB Bus里。这些信号能够提供额外的功能比如APB 从机重要的状态会被直接展示出来，而不需要通过APB总线。
 在DesignStart kit中，APB上带有的中断信号有14个：
 1. 每个对应的UART设备带有3个中断：tx_int，rx_int，overflow_int
 2. 每个计时器一个中断
