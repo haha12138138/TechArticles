@@ -13,14 +13,14 @@
 > 在ARM 提供的默认版本中，读回来的数据是会经过Buffer的，而写入的数据是默认不带Buffer的。当然如果说对系统的时钟频率很低，建议将Buffer去掉以节约一个周期的时间。
 
 %%
-#todo
 structure pic
 Interfaces pic
 %%
-
+![[APB Bridge diagram.png]]
 ### APB Bridge 是如何工作的
 #### APB Bridge 的状态转换
 首先可以看到APB Bridge 中使用了6个状态：
+
 | State name   | Function                                    |
 | ------------ | ------------------------------------------- |
 | ST_IDLE      | 等待AHB访问APB                              |
@@ -37,8 +37,8 @@ if (PCLKEN ....)
 ```
 当PCLKEN == 1时，意味着APB总线会在即将到来的时钟沿做出反应。所以所有与会引起APB信号变化的状态转换都需要这个判断条件。ST_APB_ERR1->ST_APB_ERR2 这个存粹为了满足AHB时序的转换就不需要判断PCLKEN。下图则是状态转换图
 
-%% #todo Bridge State Transition pic%%
-
+%% Bridge State Transition pic%%
+![[APB_Bridge.drawio.png]]
 #### APB Bridge 如何响应AHB 总线
 APB总线与AHB总线有一个很大的不同：APB的地址，控制，数据 3 个信号是同时到的而 AHB的数据在地址和控制信号后一个周期到达。所以有这么一段代码将地址与控制信号存起来。
 ```systemverilog
@@ -95,3 +95,15 @@ else begin
 end 
 ```
 一个转换到了ST_APB_TRNF 另一个却到了WAIT，在没有Buffer 的情况下是这样就很奇怪了。个人觉得是一个纰漏，虽然功能正确可是速度慢了。
+
+#### APB Bridge 的Low Power signal
+APB Bridge 中有两个涉及Low Power 的信号：apb_active，PCLKEN。
+apb_active 的意义就是只要是：
+1. ahb要访问这个bridge
+2. bridge 正在工作
+
+就会是高电平。
+PCLKEN就是[[Clock Gating]] 的信号。
+```systemverilog
+assign apb_active= (state!=ST_APB_IDLE)|(HSEL&HTRANS[1]);
+```
