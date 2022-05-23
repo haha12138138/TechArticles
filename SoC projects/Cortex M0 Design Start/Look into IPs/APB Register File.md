@@ -82,7 +82,3 @@ end
 //WP 用组合逻辑实现的Register
 REG1=(WriteEnable&selected&(PWDATA==1));
 ```
-
-最后附上一个 APB IIC IP的github 地址：
-https://github.com/thuriyasun/ARM_M0_V1_2022/blob/main/RHBD_IP/apb_i2c/i2c_register.sv
-可以集成在designstart 上
