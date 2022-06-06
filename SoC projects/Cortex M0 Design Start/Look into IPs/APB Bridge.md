@@ -12,11 +12,12 @@
 3. Buffer，这是一个可选的部件。主要目的是通过寄存器隔断较长的时序路径：从AHB主机一直到APB从机的跨越两个Bus的路径。
 > 在ARM 提供的默认版本中，读回来的数据是会经过Buffer的，而写入的数据是默认不带Buffer的。当然如果说对系统的时钟频率很低，建议将Buffer去掉以节约一个周期的时间。
 
+![[APB Bridge diagram.png]]
 %%
 structure pic
 Interfaces pic
 %%
-![[APB Bridge diagram.png]]
+ 
 ### APB Bridge 是如何工作的
 #### APB Bridge 的状态转换
 首先可以看到APB Bridge 中使用了6个状态：

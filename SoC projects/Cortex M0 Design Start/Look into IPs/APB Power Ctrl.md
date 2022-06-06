@@ -1,4 +1,4 @@
-#APB #IP介绍 
+#APB #系统介绍  
 %%
 Cortex M0 APB：APB Active 信号
 clock gating

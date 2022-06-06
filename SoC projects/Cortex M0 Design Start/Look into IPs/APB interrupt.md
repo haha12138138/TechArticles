@@ -3,6 +3,7 @@ interface: pic
 how to join multiple interrupt
 APB peripherals that integrate interrupts
 %%
+#apb #系统介绍 
 这一章中我们会提到：
 1. Design Start 中与APB有关的中断信号
 2. 扩展APB中断的方法
