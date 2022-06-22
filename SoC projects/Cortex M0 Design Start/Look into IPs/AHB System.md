@@ -1,13 +1,14 @@
 #AHB #系统介绍 
 
-### Design Start 中 AHB 介绍
-Advanced High performance Bus（AHB）是ARM提出的一种简单的具有较高带宽的片上总线。这个系统允许有多个主机，多个从机同时存在。当然随着其他更利于多主多从总线的出现现在比较少会使用到多主机这个功能。于是ARM 便提出了AHB-Lite 的协议，在不存在额外电路的情况下只支持一个主机的存在以简化电路。DesignStart 这个项目中便使用了AHB-Lite 来构建高速总线系统。
+### Design Start 中 AHB System介绍
+Advanced High performance Bus（AHB）是ARM提出的一种简单的具有较高带宽的片上总线。这个系统允许有多个主机，多个从机同时存在。当然随着其他更利于多主多从总线的出现现在比较少会使用到多主机这个功能。于是ARM 便提出了AHB-Lite 的协议，在不存在额外电路的情况下默认只支持一个主机的存在以简化电路。DesignStart 这个项目中便使用了AHB-Lite 来构建高速总线系统。
 
 AHB Lite系统所需要实现的功能：
 1. 数据交换
 	- 读写数据
 	- 发送错误/等待 等流控制信息
 2.  支持多主机 （可选）
+
 ### AHB系统构成
 先从宏观的角度看看这个系统：
 ![[AHB System.png]]
@@ -21,17 +22,22 @@ AHB Lite系统所需要实现的功能：
 3. 另一个AHB System
 等等......
 
-因为没有一个固定的东西，所以便用Master 来代替了。不过在DesignStart System 中， 这个Master 默认就是CPU。可以看到这里与APB相比少了和中断功耗相关的信号，这是因为这里已经是SoC的top位置了，可以直接将信号连接到CPU 或者PMU中，没有必要再绕一下。
+在DesignStart System 中， 这个Master 默认就是CPU。可以看到这里与APB相比少了和中断功耗相关的信号，这个是由于
+1. 我们的系统中的AHB部分是始终处在工作状态下
+2. AHB 未提供除APB中断外的其他中断
+
 除此之外，AHB系统对Slave部分有一个要求：
 
 > **必须存在至少一个Slave**。如果当Master 访问没有Slave 占据的位置时，这个Default Slave 就会被选中，并提供必要的response 保证系统能够继续运行。
 
 了解了系统的构造之后便来看一下各个组件是如何交互的。
+
 ### AHB 接口
 
 上左图给出的是AHB Master的接口。**所有黄色的信号都是 *输出*，红色的都是 *输入*** 。
-上右图给出的则是Slave 的接口。**所有黄色的信号都是*输入*，红色的都是*输出***。这里注意一点Slave 比Master 多出了一个 HSEL的信号，这个信号起到选择Slave 的作用。
+上右图给出的则是Slave 的接口。**所有黄色的信号都是*输入*，红色的都是*输出***。这里注意一点Slave 的HSEL 比Master HSEL的信号宽许多倍，因为这个信号起到选择Slave 的作用。
 依照我们之前分析APB的手段，现在我们要找出哪些信号作为的是Request，哪些作为的是Response。 
+
 ### AHB 时序
 在看具体的传输时序之前先来看看几个比较重要的信号：
 
