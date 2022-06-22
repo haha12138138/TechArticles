@@ -12,7 +12,7 @@ bit-band 是一种特殊的储存器模型。这个模型允许将内存访问�
 
 > 将支持这个操作的内存A映射到另一块内存B上，使得A中的每一个bit 对应着B中到一个word
 
-在我们的DesignStart系统中，ARM规划出了两块区域
+在我们的DesignStart中的[[AHB System]]，ARM规划出了两块内存来作为bit band 区域（可选的）。
 | Aliased Region          | Original Region         | Name              |
 | ----------------------- | ----------------------- | ----------------- |
 | 0x22000000 - 0x23fffffc | 0x20000000 - 0x200fffff | SRAM Region       |
@@ -25,9 +25,11 @@ bit-band 是一种特殊的储存器模型。这个模型允许将内存访问�
 > 根据写入的数据与地址修改某位
 > 写回 Original Region
 
+![[bitband.drawio.png]]
+
 ### Bit-Band Wrapper的实现
 #### 地址变换
-我们之前知道了地址的变换有这个规律：使得A中的每一个bit 对应着B中到一个word。那么A中的一个Byte就会占用8Word（32 Byte）。也就是说bit 5以上的数据才会被用于变换。另外当我们观察地址的高位部分可以发现：31-25 位是个固定的值：0x200 或 0x400。依照刚才的观察，我们可以将地址分为3个部分：
+我们之前知道了地址的变换有这个规律：**使得A中的每一个bit 对应着B中到一个word。那么A中的一个Byte就会占用8Word（32 Byte）**。也就是说bit 5以上的数据才会被用于变换。另外当我们观察地址的高位部分可以发现：31-25 位是个固定的值：0x200 或 0x400。依照刚才的观察，我们可以将地址分为3个部分：
 1. 31-25: 需根据地址判断到底是在SRAM Region 还是 Peripheral Region 并修改其值
 2. 24-5：直接使用
 3. 4-0：不用于地址变换。其中4-2 会用于修改数据。
@@ -45,7 +47,7 @@ haddr_mux[    0] = reg_bit_address[0] & (reg_bitband_size[1:0]==2'b00);
 ##### 大小端变换
 这个部分主要是将如何修改bit数据以及大小端数据的相互转换。主要涉及到的信号有两个：
 1. bit_number_dp：确定word中哪个bit会被修改
-2. byte_number_dp ：有效的数据在哪个byte里
+2. byte_number_dp ：有效的数据的起始byte
 
 先不考虑大小端的问题，假设全部是小端
 bit_number_dp 很简单就是:
@@ -72,17 +74,17 @@ always@(posedge clk or negedge rstn) begin
 end
 ```
 
-要改变数据的大小端格式首先要知道总线的第x根线承载了第y个bit。
+在具体进行设计的时候我们需知道线和数据的对应关系：期望的数据出现在32位总线上的那个位置。
 ```systemverilog
 小端数据：
 x=y
 
 大端数据:
-x=y[4:0];//byte use lower 3 bit
-x={y[4],~y[3],y[2:0]};// half word use lower 4 bit
+x=y[4:0];//byte trans uses lower 3 bit
+x={y[4],~y[3],y[2:0]};// half word trans uses lower 4 bit
 x={~y[4:3],y[2:0]}; // word
 ```
-也就是说大于1 Byte 的数据 byte之间会交叉互换。
+大于1 Byte 的数据 byte之间会交叉互换。
 最后的代码如下
 ```systemverilog
 always @(BIGENDIAN or HSIZES or HADDRS)
