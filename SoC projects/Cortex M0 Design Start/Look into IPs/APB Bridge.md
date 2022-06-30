@@ -17,12 +17,12 @@
 structure pic
 Interfaces pic
 %%
- 
+ ![[APB Bridge fsm2.png]]
 ### APB Bridge 是如何工作的
 #### APB Bridge 的状态转换
 首先可以看到APB Bridge 中使用了6个状态：
 
-| State name   | Function                                    |
+| State name   | meaning                                    |
 | ------------ | ------------------------------------------- |
 | ST_IDLE      | 等待AHB访问APB                              |
 | ST_APB_WAIT  | 等待APB的时钟沿                             |
@@ -32,16 +32,13 @@ Interfaces pic
 | ST_APB_ERR1  | 响应AHB主机，第一个AHB Error Response cycle |
 | ST_APB_ERR2  | 响应AHB主机，第二个AHB Error Resonse cycle  | 
 
-相比于标准的APB的状态转换来说，桥的转换多了3个状态：ST_APB_ERRx 是为了满足AHB对错误的响应要求，ST_APB_WAIT 则是满足APB的低功耗需求。注意到在代码中常常出现的
-```systemverilog
-if (PCLKEN ....)
-```
-当PCLKEN == 1时，意味着APB总线会在即将到来的时钟沿做出反应。所以所有与会引起APB信号变化的状态转换都需要这个判断条件。ST_APB_ERR1->ST_APB_ERR2 这个存粹为了满足AHB时序的转换就不需要判断PCLKEN。下图则是状态转换图
 
 %% Bridge State Transition pic%%
-![[APB_Bridge.drawio.png]]
-#### APB Bridge 如何响应AHB 总线
-APB总线与AHB总线有一个很大的不同：APB的地址，控制，数据 3 个信号是同时到的而 AHB的数据在地址和控制信号后一个周期到达。所以有这么一段代码将地址与控制信号存起来。
+
+#### APB Bridge 工作流程
+我们先来看看在正常情况下AHB 时序是如何与APB时序对应起来的。
+![[APB Bridge main path.png]] 
+在IDLE的时候AHB总线发送了地址和控制信号。由于AHB的地址，控制信号与数据不是同时到达的，我们就需要一个Buffer信息保存起来。
 ```systemverilog
 logic [31:0]addr_reg;
 ...
@@ -51,51 +48,25 @@ always @(posedge HCLK or negedge HRESETn) begin
 		// Initialize ...
 	end else if(apb_select) begin
 		addr_reg<=HADDR;
+		write_reg<= HWRITE;
+		// store AHB control signals to be decoded
+		// into APB control signals 
 		...
 	end
 end 
 ```
-同时 apb_select这个信号也是 ST_APB_IDLE -> ST_APB_TRNF1 的触发信号。 当数据到达时（如果没有WDATA buffer的话，同时也会出现在APB总线上），地址与控制信号已经存了起来（出现在APB总线上），状态也从IDLE 变为了 TRNF1 。由于在TRNF1 的时候APB传输还未执行完，所以便拉低HREADYout，暂停AHB的传输。
+**在APB Clk 到来的时候**，状态进入到TRNF1 。这个时候AHB传输的所有信号都到齐了便可以进行第一个周期的APB传输了。在下一个APB clk到来的时候Bridge就产生对应APB第二个周期的信号，并同时接收数据。正常来说到这里APB传输就结束了，如果说我们希望缩短RDATA的时序路径长度，便可以在该路径上加入Buffer。由于这个Buffer的存在，使得数据晚了1个AHB clk cycle，我们便需要一个额外的state：ENDOK来提示AHB主机数据到了。
 
-当APB传输结束的时候，也就是apb_tran_end这个信号拉高的时候，返回的数据将会出现在APB总线上。如果没有RDATA Buffer，这时便可以响应AHB主机，并把HREADY置高。如果有Buffer，则会进入ENDOK这个状态，再响应主机。
+接下来我们要考虑的是：**一个传输发送完成之后如何接受下一个传输**。在这里可以看到有两种转移方式。ENDOK 和 ERR2这两个state 都同时可能直接转移到TRNF中去，而TRNF2则不行。这个我个人认为是一个纰漏。虽然功能是正确的，但是从TRNF2 到WAIT 再到TRNF1 就整整浪费掉了1个PCLK CYCLE。**这两类state的最大区别是TRNF2必须要等到PCLKEN=1才能进行状态转移**，这是由于必须要保证APB信号只能在PCLK来临的时候才能变化。ENDOK 与 ERR2 本身与APB的控制信号无关。
+![[APB Bridge return path2.png]] 
 
+WAIT 这个状态很有意思，他有两个功能：
+1. 等待PCLK到来并转移到TRNF1中。
+2. 保证WDATA buffer的时序。
+
+第一个功能其实就是保证APB总线的时序：只有PCLK来临的时候APB信号才能变化。第二个功能其实是ARM 做的hack了。如果我们想要切分WDATA路径以提高频率，我们就需要一个WDATA Buffer 来暂存这个数据。这样一来数据和地址等控制信号就相差2个AHB周期了，这时候我们便可以利用WAIT来做一个延时。
+![[APB Bridge wait.png]]
 Error Response 就很简单粗暴了完全按照[[AHB System | AHB Error Response]] 的步骤来的，这里就不详述了。
-
-#### APB Bridge 中的特殊状态与转换
-ST_APB_IDLE的又一个状态变迁挺有意思：
-```systemverilog
-if (PCLKENWAVE & apb_select & ~(reg_wdata_cfg& HWRITE)) begin
-	// jump to TRNF1
-end else if (apb_select) begin
-	//jump to WAIT
-end  ...
-```
-这里的reg_wdata_cfg 指的是是否有WDATA buffer。这里可以发现，即使PCLKEN等于1， 如果有WDATA Buffer 的话，状态依然是转换到ST_APB_WAIT的。因为如果直接转换到TRNF1的话，WDATA 还未进入Buffer就开始传输了。由于保存WDATA的时候错过了一个PCLK 周期，所以必须等下一次PCLKEN 到来的时候才能进入TRNF。刚好可以利用WAIT这个状态。
-
-另外一个有意思的转换出现在TRNF2结束的时候的时候:
-```systemverilog
-...
-else if (PREADY &(~PSLVERR) &PCLKEN) begin
-	if(reg_r_data_cfg) begin
-		next_state = ST_APB_ENDOK;
-	end else begin
-		next_state = (apb_select)? 
-						ST_APB_WAIT  // PREADY&(~PSLVERR)&PCLKEN&apb_select
-						:ST_APB_IDLE;
-	end 
-end 
-...
-```
-但是其他状态都是:
-```systemverilog
-if(PCLKEN & apb_select & ~(reg_wdata_cfg & HWRITE)) begin
-	// PREADY&(~PSLVERR)&PCLKEN&apb_select 
-	next_state = ST_APB_TRNF;
-else begin
-	next_state = (apb_select)? ST_APB_WAIT:ST_APB_IDLE;
-end 
-```
-一个转换到了ST_APB_TRNF 另一个却到了WAIT，在没有Buffer 的情况下是这样就很奇怪了。个人觉得是一个纰漏，虽然功能正确可是速度慢了。
 
 #### APB Bridge 的Low Power signal
 APB Bridge 中有两个涉及Low Power 的信号：apb_active，PCLKEN。
@@ -104,7 +75,7 @@ apb_active 的意义就是只要是：
 2. bridge 正在工作
 
 就会是高电平。
-PCLKEN就是[[Clock Gating]] 的信号。
+PCLKEN就是[[Clock Gating]] 的信号，用来对PCLK进行分频。
 ```systemverilog
 assign apb_active= (state!=ST_APB_IDLE)|(HSEL&HTRANS[1]);
 ```
